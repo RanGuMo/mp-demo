@@ -3,7 +3,7 @@ spring:
     url: jdbc:mysql://127.0.0.1:3306/mp?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=Asia/Shanghai
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
-    password: MySQL123
+    password: root
 logging:
   level:
     com.itheima: debug
@@ -11,10 +11,3 @@ logging:
     dateformat: HH:mm:ss
 mybatis:
   mapper-locations: classpath*:mapper/*.xml
-
-mybatis-plus:
-  type-aliases-package: com.itheima.mp.domain.po
-  global-config:
-    db-config:
-      id-type: auto # 全局id类型为自增长
-  mapper-locations: "classpath*:/mapper/**/*.xml" # Mapper.xml文件地址，当前这个是默认值。

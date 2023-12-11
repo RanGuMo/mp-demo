@@ -25,22 +25,22 @@ class UserMapperTest {
         user.setInfo("{\"age\": 24, \"intro\": \"英文老师\", \"gender\": \"female\"}");
         user.setCreateTime(LocalDateTime.now());
         user.setUpdateTime(LocalDateTime.now());
-        userMapper.saveUser(user); //mybatis
-        // userMapper.insert(user); //mybatisPlus
+        // userMapper.saveUser(user); //mybatis
+        userMapper.insert(user); //mybatisPlus
     }
 
     @Test
     void testSelectById() {
-        User user = userMapper.queryUserById(5L); //mybatis
-        // User user = userMapper.queryById(5L);//mybatisPlus
+        // User user = userMapper.queryUserById(5L); //mybatis
+        User user = userMapper.selectById(5L);//mybatisPlus
         System.out.println("user = " + user);
     }
 
 
     @Test
     void testQueryByIds() {
-        List<User> users = userMapper.queryUserByIds(List.of(1L, 2L, 3L, 4L)); //mybatis
-        // List<User> users = userMapper.selectBatchIds(List.of(1L, 2L, 3L, 4L));//mybatisPlus
+        // List<User> users = userMapper.queryUserByIds(List.of(1L, 2L, 3L, 4L)); //mybatis
+        List<User> users = userMapper.selectBatchIds(List.of(1L, 2L, 3L, 4L));//mybatisPlus
         users.forEach(System.out::println);
     }
 
@@ -49,13 +49,13 @@ class UserMapperTest {
         User user = new User();
         user.setId(5L);
         user.setBalance(20000);
-        userMapper.updateUser(user); //mybatis
-        // userMapper.updateById(user);//mybatisPlus
+        // userMapper.updateUser(user); //mybatis
+        userMapper.updateById(user);//mybatisPlus
     }
 
     @Test
     void testDeleteUser() {
-        userMapper.deleteUser(5L); //mybatis
-        // userMapper.deleteById(5L); //mybatisPlus
+        // userMapper.deleteUser(5L); //mybatis
+        userMapper.deleteById(5L); //mybatisPlus
     }
 }
