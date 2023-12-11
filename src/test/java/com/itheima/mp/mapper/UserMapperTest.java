@@ -58,4 +58,10 @@ class UserMapperTest {
         // userMapper.deleteUser(5L); //mybatis
         userMapper.deleteById(5L); //mybatisPlus
     }
+
+    @Test
+    void testQuery() {
+        User user = userMapper.queryById(1L);
+        System.out.println("user = " + user);
+    }
 }

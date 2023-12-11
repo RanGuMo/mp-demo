@@ -20,7 +20,7 @@ import java.util.List;
 // }
 
 public interface UserMapper extends BaseMapper<User>{
-
+    User queryById(@Param("id") Long id);
 }
 
 

@@ -52,6 +52,10 @@
 <!--        LIMIT 10-->
 <!--    </select>-->
 
+    <select id="queryById" resultType="User">
+        SELECT * FROM user WHERE id = #{id}
+    </select>
+
 
 
 </mapper>
