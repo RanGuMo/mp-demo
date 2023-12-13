@@ -152,5 +152,16 @@ class UserMapperTest {
         userMapper.deductBalanceByIds(200, wrapper);
     }
 
+    //=====================用自定义sql完成联表查询===========================================================================
+    @Test
+    void testCustomJoinWrapper() {
+    //     1.准备自定义的查询条件
+        QueryWrapper<User> wrapper = new QueryWrapper<User>()
+                .in("u.id",List.of(1L,2L,4L))
+                .eq("a.city","北京");
+    //     2.调用mapper 的自定义方法
+       List<User> users =  userMapper.queryUserByWrapper(wrapper);
+        users.forEach(System.out::println);
+    }
 
 }

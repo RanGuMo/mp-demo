@@ -27,6 +27,10 @@ public interface UserMapper extends BaseMapper<User>{
 
     @Select("UPDATE  user SET balance = balance -#{money} ${ew.customSqlSegment}")
     void deductBalanceByIds(@Param("money") int money, @Param("ew") QueryWrapper<User> wrapper);
+
+
+    // @Select("SELECT u.* FROM user u INNER JOIN address a ON u.id = a.user_id ${ew.customSqlSegment}")
+    List<User> queryUserByWrapper(@Param("ew")QueryWrapper<User> wrapper);
 }
 
 
