@@ -70,7 +70,7 @@ class IUserServiceTest {
         List<User> list = new ArrayList<>(1000); // 创建一个容量为1000的空ArrayList
 
         long b = System.currentTimeMillis(); // 记录开始时间
-        for (int i = 1; i <= 100000; i++) { // 循环100000次，即准备10万条数据
+        for (int i = 1; i <= 1000000; i++) { // 循环100000次，即准备10万条数据
             list.add(buildUser(i)); // 将buildUser(i)的返回结果添加到list中
 
             // 每1000条批量插入一次
