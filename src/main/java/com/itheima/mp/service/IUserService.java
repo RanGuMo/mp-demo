@@ -14,5 +14,7 @@ public interface IUserService extends IService<User> {
     void deductBalanceLambdaUpdate(Long id, Integer money);
 
     UserVO queryUserAndAddressById(Long userId);
+
+    List<UserVO> queryUserAndAddressByIds(List<Long> ids);
     // 拓展自定义方法
 }

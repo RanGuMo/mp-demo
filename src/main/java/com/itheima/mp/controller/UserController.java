@@ -52,7 +52,7 @@ public class UserController {
     //     // 2.处理po转vo
     //     return BeanUtil.copyProperties(user, UserVO.class);
     // }
-    // =====================需求：改造根据id用户查询的接口，查询用户的同时返回用户收货地址列表======================================
+    // =====================需求一：改造根据id用户查询的接口，查询用户的同时返回用户收货地址列表======================================
     @GetMapping("/{id}")
     @ApiOperation("根据id查询用户")
     public UserVO queryUserById(@PathVariable("id") Long userId){
@@ -60,16 +60,25 @@ public class UserController {
         return userService.queryUserAndAddressById(userId);
     }
 
-    // =====================需求：改造根据id用户查询的接口，查询用户的同时返回用户收货地址列表======================================
+    // =====================需求一：改造根据id用户查询的接口，查询用户的同时返回用户收货地址列表======================================
 
+    // @GetMapping
+    // @ApiOperation("根据id集合查询用户")
+    // public List<UserVO> queryUserByIds(@RequestParam("ids") List<Long> ids){
+    //     // 1.查询用户
+    //     List<User> users = userService.listByIds(ids);
+    //     // 2.处理po转vo （集合用copyToList）
+    //     return BeanUtil.copyToList(users, UserVO.class);
+    // }
+
+    // =====================需求二： 根据`id`批量查询用户，并查询出用户对应的所有地址======================================
     @GetMapping
     @ApiOperation("根据id集合查询用户")
     public List<UserVO> queryUserByIds(@RequestParam("ids") List<Long> ids){
-        // 1.查询用户
-        List<User> users = userService.listByIds(ids);
-        // 2.处理po转vo （集合用copyToList）
-        return BeanUtil.copyToList(users, UserVO.class);
+        return userService.queryUserAndAddressByIds(ids);
     }
+    // =====================需求二： 根据`id`批量查询用户，并查询出用户对应的所有地址======================================
+
 
     @PutMapping("{id}/deduction/{money}")
     @ApiOperation("扣减用户余额")
