@@ -1,5 +1,6 @@
 package com.itheima.mp.service;
 
+import com.baomidou.mybatisplus.extension.toolkit.Db;
 import com.itheima.mp.domain.po.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,6 +82,30 @@ class IUserServiceTest {
         }
         long e = System.currentTimeMillis(); // 记录结束时间
         System.out.println("耗时：" + (e - b)); // 输出耗时时间
+    }
+//==========================测试批量新增=================================
+//==========================测试Db=================================
+    @Test
+    void testDbGet() {
+        User user = Db.getById(1L, User.class);
+        System.out.println(user);
+    }
+
+    @Test
+    void testDbList() {
+        // 利用Db实现复杂条件查询
+        List<User> list = Db.lambdaQuery(User.class)
+                .like(User::getUsername, "o")
+                .ge(User::getBalance, 1000)
+                .list();
+        list.forEach(System.out::println);
+    }
+
+    @Test
+    void testDbUpdate() {
+        Db.lambdaUpdate(User.class)
+                .set(User::getBalance, 2000)
+                .eq(User::getUsername, "Rose");
     }
 
 
