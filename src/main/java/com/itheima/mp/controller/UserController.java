@@ -44,14 +44,23 @@ public class UserController {
         userService.removeById(userId);
     }
 
+    // @GetMapping("/{id}")
+    // @ApiOperation("根据id查询用户")
+    // public UserVO queryUserById(@PathVariable("id") Long userId){
+    //     // 1.查询用户
+    //     User user = userService.getById(userId);
+    //     // 2.处理po转vo
+    //     return BeanUtil.copyProperties(user, UserVO.class);
+    // }
+    // =====================需求：改造根据id用户查询的接口，查询用户的同时返回用户收货地址列表======================================
     @GetMapping("/{id}")
     @ApiOperation("根据id查询用户")
     public UserVO queryUserById(@PathVariable("id") Long userId){
-        // 1.查询用户
-        User user = userService.getById(userId);
-        // 2.处理po转vo
-        return BeanUtil.copyProperties(user, UserVO.class);
+        // 基于自定义service方法查询
+        return userService.queryUserAndAddressById(userId);
     }
+
+    // =====================需求：改造根据id用户查询的接口，查询用户的同时返回用户收货地址列表======================================
 
     @GetMapping
     @ApiOperation("根据id集合查询用户")
