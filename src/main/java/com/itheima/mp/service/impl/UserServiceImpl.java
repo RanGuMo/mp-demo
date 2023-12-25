@@ -5,6 +5,7 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.extension.toolkit.Db;
+import com.itheima.mp.domain.enums.UserStatus;
 import com.itheima.mp.domain.po.Address;
 import com.itheima.mp.domain.po.User;
 import com.itheima.mp.domain.vo.AddressVO;
@@ -24,7 +25,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         // 1.查询用户
         User user = getById(id);
         // 2.判断用户状态
-        if (user == null || user.getStatus() == 2) {
+        if (user == null || user.getStatus() == UserStatus.FREEZE) {
             throw new RuntimeException("用户状态异常");
         }
         // 3.判断用户余额
@@ -52,7 +53,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         // 1.查询用户
         User user = getById(id);
         // 2.判断用户状态
-        if (user == null || user.getStatus() == 2) {
+        if (user == null || user.getStatus() == UserStatus.FREEZE) {
             throw new RuntimeException("用户状态异常");
         }
         // 3.判断用户余额
@@ -74,7 +75,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     public UserVO queryUserAndAddressById(Long userId) {
         // 1.查询用户
         User user = getById(userId);
-        if (user == null || user.getStatus() == 2) {
+        if (user == null || user.getStatus() == UserStatus.FREEZE) {
             throw new RuntimeException("用户状态异常");
         }
         // 2.查询收货地址
@@ -120,4 +121,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         }
         return list;
     }
+
+
 }

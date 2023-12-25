@@ -2,6 +2,7 @@ package com.itheima.mp.service;
 
 import com.baomidou.mybatisplus.extension.toolkit.Db;
 import com.itheima.mp.domain.po.User;
+import com.itheima.mp.domain.po.UserInfo;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,7 +26,12 @@ class IUserServiceTest {
         user.setPassword("123");
         user.setPhone("18688990011");
         user.setBalance(200);
-        user.setInfo("{\"age\": 24, \"intro\": \"英文老师\", \"gender\": \"female\"}");
+        // user.setInfo("{\"age\": 24, \"intro\": \"英文老师\", \"gender\": \"female\"}");
+        UserInfo userInfo = new UserInfo();
+        userInfo.setAge(24);
+        userInfo.setIntro("英文老师");
+        userInfo.setGender("female");
+        user.setInfo(userInfo);
         user.setCreateTime(LocalDateTime.now());
         user.setUpdateTime(LocalDateTime.now());
 
@@ -58,7 +64,12 @@ class IUserServiceTest {
         user.setPassword("123");
         user.setPhone("" + (18688190000L + i));
         user.setBalance(2000);
-        user.setInfo("{\"age\": 24, \"intro\": \"英文老师\", \"gender\": \"female\"}");
+        // user.setInfo("{\"age\": 24, \"intro\": \"英文老师\", \"gender\": \"female\"}");
+        UserInfo userInfo = new UserInfo();
+        userInfo.setAge(24);
+        userInfo.setIntro("英文老师");
+        userInfo.setGender("female");
+        user.setInfo(userInfo);
         user.setCreateTime(LocalDateTime.now());
         user.setUpdateTime(user.getCreateTime());
         return user;
@@ -108,6 +119,13 @@ class IUserServiceTest {
                 .eq(User::getUsername, "Rose");
     }
 
+
+    //  ========================================枚举类型的使用===================================================================
+    @Test
+    void testService() {
+        List<User> list = userService.list();
+        list.forEach(System.out::println);
+    }
 
 
 }
