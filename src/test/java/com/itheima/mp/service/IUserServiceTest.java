@@ -1,5 +1,7 @@
 package com.itheima.mp.service;
 
+import com.baomidou.mybatisplus.core.metadata.OrderItem;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.toolkit.Db;
 import com.itheima.mp.domain.po.User;
 import com.itheima.mp.domain.po.UserInfo;
@@ -125,6 +127,29 @@ class IUserServiceTest {
     void testService() {
         List<User> list = userService.list();
         list.forEach(System.out::println);
+    }
+
+
+    //  ========================================分页插件的使用===================================================================
+    @Test
+    void testPageQuery(){
+        int pageNo = 1, pageSize = 2;
+    //     1.准备分页条件
+    //     1.1.分页条件
+        Page<User> page = Page.of(pageNo, pageSize);
+    //     1.2.排序条件 (先按照balance 升序，如果存在一致的balance 再按照 id 进行升序排序)
+        page.addOrder(new OrderItem("balance",true));
+        page.addOrder(new OrderItem("id",true));
+
+    //     2.分页查询
+        Page<User> p = userService.page(page);
+    //     3.解析
+        long total = p.getTotal(); // 总记录数
+        System.out.println("total = "+total);
+        long pages = p.getPages(); // 总页数
+        System.out.println("pages = "+pages);
+        List<User> users = p.getRecords(); // 分页结果
+        users.forEach(System.out::println);
     }
 
 
