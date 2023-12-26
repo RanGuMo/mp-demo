@@ -3,11 +3,16 @@ package com.itheima.mp.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.metadata.OrderItem;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.extension.toolkit.Db;
+import com.itheima.mp.domain.dto.PageDTO;
 import com.itheima.mp.domain.enums.UserStatus;
 import com.itheima.mp.domain.po.Address;
 import com.itheima.mp.domain.po.User;
+import com.itheima.mp.domain.query.UserQuery;
 import com.itheima.mp.domain.vo.AddressVO;
 import com.itheima.mp.domain.vo.UserVO;
 import com.itheima.mp.mapper.UserMapper;
@@ -120,6 +125,46 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
             userVO.setAddresses(addressMap.get(user.getId()));
         }
         return list;
+    }
+
+    @Override
+    public PageDTO<UserVO> queryUsersPage(UserQuery query) {
+        String name = query.getName();
+        Integer status = query.getStatus();
+        Integer maxBalance = query.getMaxBalance();
+        Integer minBalance = query.getMinBalance();
+        // 1.1.分页条件
+        Page<User> page = Page.of(query.getPageNo(), query.getPageSize());
+        // 1.2.排序条件
+        if (StrUtil.isNotBlank(query.getSortBy())) { // 排序条件不为空
+            page.addOrder(new OrderItem(query.getSortBy(), query.getIsAsc()));
+        } else { // 排序条件为空，默认按照更新时间进行降序排序
+            page.addOrder(new OrderItem("update_time", false));
+        }
+        // 2.分页查询
+        Page<User> p = lambdaQuery()
+                .like(name != null, User::getUsername, name)
+                .eq(status != null, User::getStatus, status)
+                .ge(minBalance != null, User::getBalance, minBalance)
+                .le(maxBalance != null, User::getBalance, maxBalance)
+                .page(page);
+
+        // 3.封装VO结果
+        PageDTO<UserVO> dto = new PageDTO<>();
+        // 3.1.总条数
+        dto.setTotal(p.getTotal());
+        // 3.2.总页数
+        dto.setPages(p.getPages());
+        // 3.3.当前页数据
+        List<User> records = p.getRecords();
+        if (CollUtil.isEmpty(records)) {
+            dto.setList(Collections.emptyList());
+            return dto;
+        }
+        // 3.4.拷贝user的vo
+        dto.setList(BeanUtil.copyToList(records, UserVO.class));
+        // 4.返回
+        return dto;
     }
 
 

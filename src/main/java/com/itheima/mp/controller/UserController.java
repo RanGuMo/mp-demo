@@ -4,6 +4,7 @@ package com.itheima.mp.controller;
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.itheima.mp.domain.dto.PageDTO;
 import com.itheima.mp.domain.dto.UserFormDTO;
 import com.itheima.mp.domain.po.User;
 import com.itheima.mp.domain.query.UserQuery;
@@ -148,5 +149,12 @@ public class UserController {
     @ApiOperation("扣减用户余额，如果余额为0，状态改为2")
     public void deductBalanceLambdaUpdate(@PathVariable("id") Long id, @PathVariable("money")Integer money){
         userService.deductBalanceLambdaUpdate(id, money);
+    }
+
+    //===========================分页查询接口===================================================================================
+    @ApiOperation("根据分页条件查询用户的接口")
+    @GetMapping("/page")
+    public PageDTO<UserVO> queryUsersPage(UserQuery query){
+        return userService.queryUsersPage(query);
     }
 }
