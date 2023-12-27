@@ -127,20 +127,55 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         return list;
     }
 
+    // @Override
+    // public PageDTO<UserVO> queryUsersPage(UserQuery query) {
+    //     String name = query.getName();
+    //     Integer status = query.getStatus();
+    //     Integer maxBalance = query.getMaxBalance();
+    //     Integer minBalance = query.getMinBalance();
+    //     // 1.构建分页条件
+    //     // 1.1.分页条件
+    //     Page<User> page = Page.of(query.getPageNo(), query.getPageSize());
+    //     // 1.2.排序条件
+    //     if (StrUtil.isNotBlank(query.getSortBy())) { // 排序条件不为空
+    //         page.addOrder(new OrderItem(query.getSortBy(), query.getIsAsc()));
+    //     } else { // 排序条件为空，默认按照更新时间进行降序排序
+    //         page.addOrder(new OrderItem("update_time", false));
+    //     }
+    //     // 2.分页查询
+    //     Page<User> p = lambdaQuery()
+    //             .like(name != null, User::getUsername, name)
+    //             .eq(status != null, User::getStatus, status)
+    //             .ge(minBalance != null, User::getBalance, minBalance)
+    //             .le(maxBalance != null, User::getBalance, maxBalance)
+    //             .page(page);
+    //
+    //     // 3.封装VO结果
+    //     PageDTO<UserVO> dto = new PageDTO<>();
+    //     // 3.1.总条数
+    //     dto.setTotal(p.getTotal());
+    //     // 3.2.总页数
+    //     dto.setPages(p.getPages());
+    //     // 3.3.当前页数据
+    //     List<User> records = p.getRecords();
+    //     if (CollUtil.isEmpty(records)) {
+    //         dto.setList(Collections.emptyList());
+    //         return dto;
+    //     }
+    //     // 3.4.拷贝user的vo
+    //     dto.setList(BeanUtil.copyToList(records, UserVO.class));
+    //     // 4.返回
+    //     return dto;
+    // }
+
     @Override
     public PageDTO<UserVO> queryUsersPage(UserQuery query) {
         String name = query.getName();
         Integer status = query.getStatus();
         Integer maxBalance = query.getMaxBalance();
         Integer minBalance = query.getMinBalance();
-        // 1.1.分页条件
-        Page<User> page = Page.of(query.getPageNo(), query.getPageSize());
-        // 1.2.排序条件
-        if (StrUtil.isNotBlank(query.getSortBy())) { // 排序条件不为空
-            page.addOrder(new OrderItem(query.getSortBy(), query.getIsAsc()));
-        } else { // 排序条件为空，默认按照更新时间进行降序排序
-            page.addOrder(new OrderItem("update_time", false));
-        }
+        // 1.构建分页条件
+        Page<User> page = query.toMpPageDefaultSortByUpdateTimeDesc();
         // 2.分页查询
         Page<User> p = lambdaQuery()
                 .like(name != null, User::getUsername, name)
@@ -149,23 +184,36 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
                 .le(maxBalance != null, User::getBalance, maxBalance)
                 .page(page);
 
-        // 3.封装VO结果
-        PageDTO<UserVO> dto = new PageDTO<>();
-        // 3.1.总条数
-        dto.setTotal(p.getTotal());
-        // 3.2.总页数
-        dto.setPages(p.getPages());
-        // 3.3.当前页数据
-        List<User> records = p.getRecords();
-        if (CollUtil.isEmpty(records)) {
-            dto.setList(Collections.emptyList());
-            return dto;
-        }
-        // 3.4.拷贝user的vo
-        dto.setList(BeanUtil.copyToList(records, UserVO.class));
-        // 4.返回
-        return dto;
+        // // 3.封装VO结果
+        // PageDTO<UserVO> dto = new PageDTO<>();
+        // // 3.1.总条数
+        // dto.setTotal(p.getTotal());
+        // // 3.2.总页数
+        // dto.setPages(p.getPages());
+        // // 3.3.当前页数据
+        // List<User> records = p.getRecords();
+        // if (CollUtil.isEmpty(records)) {
+        //     dto.setList(Collections.emptyList());
+        //     return dto;
+        // }
+        // // 3.4.拷贝user的vo
+        // dto.setList(BeanUtil.copyToList(records, UserVO.class));
+        // // 4.返回
+        // return dto;
+        // 3.封装返回
+        // return PageDTO.of(page, UserVO.class);
+
+        // 3.封装返回
+        return PageDTO.of(page, user -> {
+            // 拷贝属性到VO
+            UserVO vo = BeanUtil.copyProperties(user, UserVO.class);
+            // 用户名脱敏
+            String username = vo.getUsername();
+            vo.setUsername(username.substring(0, username.length() - 2) + "**");
+            return vo;
+        });
     }
+
 
 
 }
